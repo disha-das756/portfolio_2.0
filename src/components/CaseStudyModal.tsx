@@ -12,11 +12,15 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ project, onClose
   if (!project) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-end bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-end bg-black/40 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={onClose}
+    >
       {/* Slide-over Drawer */}
       <div
         className="w-full max-w-2xl h-full bg-[#FAF7F2] p-6 sm:p-10 overflow-y-auto flex flex-col justify-between shadow-2xl border-l border-[#DEBEC8] animate-in slide-in-from-right duration-300"
         role="dialog"
+        onClick={(e) => e.stopPropagation()}
         aria-labelledby="case-study-title"
       >
         <div className="flex flex-col gap-6">
@@ -53,6 +57,22 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ project, onClose
             <p className="text-sm font-sans-clean text-[#574048] leading-relaxed">
               {project.fullDesc}
             </p>
+          </div>
+
+          {/* Screenshot */}
+          <div className="rounded-xl overflow-hidden border border-[#E2E8F0] bg-white shadow-sm">
+            <img src={project.image} alt={`${project.title} screenshot`} className="w-full h-auto" />
+            {project.liveUrl && project.liveUrl !== '#' && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-between gap-2 px-3 py-2 border-t border-[#E2E8F0] bg-[#FAF7F2] text-xs font-mono-code text-[#B10E6B] hover:bg-[#FCE7F3] transition-colors"
+              >
+                <span className="truncate">{project.liveUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
+                <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+              </a>
+            )}
           </div>
 
           {/* Tech Stack Strip */}
@@ -158,6 +178,17 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ project, onClose
               <Github className="w-3.5 h-3.5" />
               <span>GitHub Repository</span>
             </a>
+            {project.liveUrl && project.liveUrl !== '#' && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-[#F5F2FB] text-[#1E1E24] border border-[#E2E8F0] text-xs font-mono-code transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Live Demo</span>
+              </a>
+            )}
           </div>
 
           <button
