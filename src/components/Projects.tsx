@@ -4,14 +4,14 @@ import { PROJECTS } from '../data/portfolioData';
 import { CaseStudyModal } from './CaseStudyModal';
 import { zenAudio } from '../utils/audio';
 import { useMascot } from '../context/MascotContext';
-import { ArrowRight, Github, Sparkles, Network, Search, Layers, Play } from 'lucide-react';
+import { ArrowRight, Github, ExternalLink } from 'lucide-react';
 
 interface ProjectsProps {
   onTriggerToast: (msg: string, icon?: string) => void;
 }
 
 export const Projects: React.FC<ProjectsProps> = ({ onTriggerToast }) => {
-  const [activeFilter, setActiveFilter] = useState<'all' | 'agent' | 'rag' | 'creative'>('all');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'agent' | 'rag' | 'fullstack'>('all');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const { triggerReaction } = useMascot();
 
@@ -85,16 +85,16 @@ export const Projects: React.FC<ProjectsProps> = ({ onTriggerToast }) => {
           </button>
           <button
             onClick={() => {
-              setActiveFilter('creative');
+              setActiveFilter('fullstack');
               zenAudio.playKotoNote(3);
             }}
             className={`px-4 py-1.5 rounded-full text-xs font-mono-code transition-all ${
-              activeFilter === 'creative'
+              activeFilter === 'fullstack'
                 ? 'bg-[#B10E6B] text-white shadow-sm'
                 : 'text-[#57534E] hover:text-[#1E1E24]'
             }`}
           >
-            Creative Web
+            Full-Stack
           </button>
         </div>
       </div>
@@ -118,71 +118,20 @@ export const Projects: React.FC<ProjectsProps> = ({ onTriggerToast }) => {
               data-cursor="project"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                {/* Left Side: Miniature Architectural Sandbox Diagram */}
-                <div className="lg:col-span-5 rounded-xl bg-gradient-to-br from-[#FAF7F2] to-[#F5F2FB] p-5 border border-[#DEBEC8]/60 relative overflow-hidden flex flex-col justify-between min-h-[300px]">
-                  {/* Sandbox Header */}
+                {/* Left Side: Project Screenshot */}
+                <div className="lg:col-span-5 rounded-xl bg-gradient-to-br from-[#FAF7F2] to-[#F5F2FB] p-5 border border-[#DEBEC8]/60 relative overflow-hidden flex flex-col gap-4">
                   <div className="flex items-center justify-between text-xs font-mono-code text-[#8B7079]">
                     <span className="text-[#B10E6B] font-semibold">{project.stage}</span>
-                    <span>installation_0{idx + 1}.graph</span>
+                    <span>project_0{idx + 1}.png</span>
                   </div>
 
-                  {/* Stylized Visual Representation */}
-                  <div className="my-6 flex flex-col items-center justify-center relative">
-                    {project.category === 'agent' && (
-                      <div className="flex flex-col items-center gap-3">
-                        <div className="flex items-center gap-3">
-                          <div className="px-3 py-1.5 rounded-lg bg-white border border-[#E2E8F0] shadow-sm text-xs font-mono-code text-[#B10E6B] flex items-center gap-1.5">
-                            <Sparkles className="w-3.5 h-3.5 text-[#B10E6B]" />
-                            <span>ReAct Thought</span>
-                          </div>
-                          <span className="text-[#B10E6B]">➔</span>
-                          <div className="px-3 py-1.5 rounded-lg bg-[#B10E6B] text-white shadow-sm text-xs font-mono-code flex items-center gap-1.5">
-                            <Search className="w-3.5 h-3.5" />
-                            <span>Tool Call</span>
-                          </div>
-                          <span className="text-[#B10E6B]">➔</span>
-                          <div className="px-3 py-1.5 rounded-lg bg-white border border-[#E2E8F0] shadow-sm text-xs font-mono-code text-[#3F665C]">
-                            Observation
-                          </div>
-                        </div>
-                        <div className="text-[11px] font-mono-code text-[#8B7079] mt-2">
-                          LangChain • Dynamic Pydantic schemas • Loop evaluation
-                        </div>
-                      </div>
-                    )}
-
-                    {project.category === 'rag' && (
-                      <div className="flex flex-col items-center gap-3">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2.5 rounded-lg bg-white border border-[#E2E8F0] shadow-sm flex items-center gap-1.5 text-xs font-mono-code text-[#1E1E24]">
-                            <Layers className="w-4 h-4 text-[#825100]" />
-                            <span>PDF Chunks</span>
-                          </div>
-                          <span className="text-[#825100]">➔</span>
-                          <div className="p-2.5 rounded-lg bg-[#FFDDB8] text-[#825100] font-semibold shadow-sm text-xs font-mono-code">
-                            FAISS Vector Index
-                          </div>
-                          <span className="text-[#825100]">➔</span>
-                          <div className="p-2.5 rounded-lg bg-white border border-[#E2E8F0] text-xs font-mono-code text-[#10B981]">
-                            Grounded Answer
-                          </div>
-                        </div>
-                        <div className="text-[11px] font-mono-code text-[#8B7079] mt-2">
-                          Sub-12ms Cosine Search • Zero Speculation
-                        </div>
-                      </div>
-                    )}
-
-                    {project.category === 'creative' && (
-                      <div className="flex flex-col items-center gap-2">
-                        <div className="w-28 h-28 rounded-full bg-[#FCE7F3] border-2 border-dashed border-[#EC4899] flex items-center justify-center animate-spin" style={{ animationDuration: '24s' }}>
-                          <span className="text-3xl">🌸</span>
-                        </div>
-                        <div className="text-[11px] font-mono-code text-[#B10E6B] mt-1">
-                          HTML5 Canvas • Web Audio • 60 FPS
-                        </div>
-                      </div>
-                    )}
+                  <div className="rounded-lg overflow-hidden border border-[#E2E8F0] bg-white shadow-sm aspect-[16/10]">
+                    <img
+                      src={project.image}
+                      alt={`${project.title} screenshot`}
+                      loading="lazy"
+                      className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
+                    />
                   </div>
 
                   {/* Metrics Strip */}
@@ -251,6 +200,19 @@ export const Projects: React.FC<ProjectsProps> = ({ onTriggerToast }) => {
                       <Github className="w-3.5 h-3.5" />
                       <span>Code</span>
                     </a>
+
+                    {project.liveUrl && project.liveUrl !== '#' && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="px-4 py-2.5 rounded-full bg-white hover:bg-[#F5F2FB] text-[#1E1E24] font-mono-code text-xs border border-[#E2E8F0] transition-colors flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>Live</span>
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
