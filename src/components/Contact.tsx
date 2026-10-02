@@ -17,30 +17,55 @@ export const Contact: React.FC<ContactProps> = ({ onTriggerToast }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
+    const accessKey = import.meta.env.VITE_WEB3FORMS_KEY;
+    if (!accessKey) {
+      setError('Contact form is not configured yet. Please email me directly.');
+      return;
+    }
+
+    setError('');
     setIsSubmitting(true);
     zenAudio.playKotoNote(3);
     onTriggerToast("Your letter is flying across the wooden bridge to Disha... 🌸", "💌");
 
-    // Trigger petal storm
-    if (typeof window !== 'undefined' && (window as unknown as { triggerPetalStorm?: () => void }).triggerPetalStorm) {
-      (window as unknown as { triggerPetalStorm: () => void }).triggerPetalStorm();
-    }
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: accessKey,
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject || `Portfolio message from ${formData.name}`,
+          message: formData.message,
+          from_name: 'Portfolio Contact Form'
+        })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.message || 'Request failed');
 
-    setTimeout(() => {
-      setIsSubmitting(false);
+      // Trigger petal storm
+      if (typeof window !== 'undefined' && (window as unknown as { triggerPetalStorm?: () => void }).triggerPetalStorm) {
+        (window as unknown as { triggerPetalStorm: () => void }).triggerPetalStorm();
+      }
+
       setIsSent(true);
       zenAudio.playTempleBell();
       onTriggerToast("Your message reached the garden ✨", "🌸");
       setFormData({ name: '', email: '', subject: '', message: '' });
-
-      setTimeout(() => {
-        setIsSent(false);
-      }, 6000);
-    }, 1500);
+      setTimeout(() => setIsSent(false), 6000);
+    } catch {
+      setError('Something went wrong sending your message. Please try again or email me directly.');
+      onTriggerToast("The letter couldn't be delivered. Please try again.", "⚠️");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -218,6 +243,12 @@ export const Contact: React.FC<ContactProps> = ({ onTriggerToast }) => {
                     className="w-full px-4 py-2.5 rounded-lg bg-[#FAF7F2] border border-[#E2E8F0] focus:bg-white focus:outline-none focus:border-[#EC4899] transition-all text-sm font-sans-clean resize-none"
                   />
                 </div>
+
+                {error && (
+                  <p role="alert" className="text-xs font-sans-clean text-[#B10E6B] bg-[#FCE7F3] border border-[#F472B6]/50 rounded-lg px-3 py-2">
+                    {error}
+                  </p>
+                )}
 
                 <button
                   type="submit"
