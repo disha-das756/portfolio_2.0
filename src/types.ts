@@ -2,8 +2,9 @@ export interface Project {
   id: string;
   title: string;
   subtitle: string;
-  category: 'agent' | 'rag' | 'backend' | 'creative';
+  category: 'agent' | 'rag' | 'fullstack';
   stage: 'In Bloom 🌸' | 'Evergreen 🌲' | 'Harvested 🌾' | 'Seedling 🌱';
+  image: string;
   shortDesc: string;
   fullDesc: string;
   techStack: string[];
